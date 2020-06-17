@@ -26,6 +26,8 @@
 #include <Kaleidoscope-Leader.h>
 #include <Kaleidoscope-LEDEffect-DigitalRain.h>
 
+#include <Kaleidoscope-LED-LeaderSequenceColor.h>
+
 // Macros
 enum { MACRO_ARROW,
        MACRO_TOGGLE_RECENT_OR_DEFAULT
@@ -306,6 +308,7 @@ KALEIDOSCOPE_INIT_PLUGINS(
   LEDPaletteTheme,
   // The Colormap effect makes it possible to set up per-layer colormaps
   ColormapEffect,
+  LeaderSequenceColorEffect,
   Leader,
   TopsyTurvy,
   ActiveModColorEffect,
