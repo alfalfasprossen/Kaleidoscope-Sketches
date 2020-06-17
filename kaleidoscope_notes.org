@@ -1,0 +1,126 @@
+* Trouble Shooting
+** Device Not Recognized (Win 10)
+When I flashed a faulty firmware Win 10 didn't recognize the Model 01.
+Thus one can also not re-flash normally through arduino.
+
+The solution is to *hold the prog-key while plugging the device in*.
+It registers under a different com-port for arduino, but doesn't
+attempt to be a USB device that windows has to recognize.
+
+* Leader 
+** no partial match action / no match cancels
+A partial match should only be activated if it is also a full match
+but comes after the partial matches, so the only option to activate a
+partial match is by timeout. Hitting any key that produces no match
+for all sequences should be treated as a cancel.
+
+There might be users that want partial matches to fire, though which
+partial match fires is hard to define. Should the first partial match
+fire or the last one, or all of them and in which order then? The
+current implementation probably fires the first match as it supports
+partial matches to be defined before full matches, causing both to
+fire in the worst case - though that may even be desired.
+
+Ideally we could allow this to be configurable, defaulting to the
+clearly defined behaviour though, but providing an option to behave
+like the old implementation.
+
+** cancel key
+A key to cancel processing the leader sequences to prevent
+a partial match from being activated after a timeout - useful when
+hitting a leader key by accident.
+
+The default key could be =Key_Escape= though it should not be
+hardcoded to that because people might want to have leader sequences
+including that key because it may be comfortably reachable on their
+keymaps. An alternative might be to cancel by hitting the initiating
+leader key again - maybe the option to define either per leader key
+might be nice. A user may want to cancel most sequences by hitting
+esc, except that one that makes use of it.
+** TODO check reason for inject function
+Leader has an inject function that is currently not used - Leader
+itself will ignore keys marked as INJECTED though injecting a key
+through that function will not mark is as INJECTED - maybe the
+function is a residue from copy-pasting code from OneShot or so.
+** TODO check reason for ignoring INJECTED keys
+There is no reason outlined and as the plugin itself won't create
+injected keys it is not clear why they would be ignored.
+** callback functions
+It might make sense to provide callback functions for matches and
+partial matches for other plugins to dig into. They may not be
+necessry though when making a getter for the sequence.
+** TODO check current release trigger problem
+check if holding key_1 then pressing key_2 and realeasting key_1 will
+trigger 2, as the on release that is happening // implicitly here does
+not check if it is the same key. This might // be considered safe
+enough, but might be a bug in Leader, maybe // ask algernon. or when
+is isActive even returning false after // being activated once? there
+is no general reset happening after // completeing a sequence? // //
+So if having a sequence L-a and L-a-b, will both activate when //
+pressing L-a-b, as there is no reset happening after L-a. Note // that
+the keys only trigger actions on realease.
+** TODO search for callback / hook through the codebase
+to see if there is some established way to do those	
+
+* Leader Seq Color
+** performance
+Considering more performance, like what we do when actually
+building the map, it might be faster if we would register the
+keys once they come up - and with a callback from the Leader
+plugin that might be an option - consider that the amount of
+time a leader is active is so minimal that a slight performance
+drain will most likely not bother anyone.
+** get addr from key
+
+KeyAddr getAddrFromKey(const Key& key) {
+		// We only get the first matching address - so a layer having
+		// the same key in multiple positions will not yield multiple.
+		for (auto key_addr : KeyAddr::all()) {
+			if (::Layer.lookupOnActiveLayer(key_addr) == key) {
+				return key_addr;
+			}
+		}
+	}
+** bla
+// we may need to track a copy of the sequence_ so we know which
+	// keys to reset after the leader is already resetted in the case
+	// of using only the leader that would be. This depends on
+	// performance implications for calling LEDControl::refreshAll()
+	// but it may also be problematic if another plugin has a
+	// temporary different color set - though if such a plugin would
+	// overwritten one of the sequence keys it would have lost them
+	// anyway - but if we just call refreshAll, we may blank out keys
+	// that are not related to our leader stuff. - so the safest
+	// option, and probably the fastest is to only reset those keys
+	// that we know we changed before.
+	//
+	// We need to reset keys that are not part of the sequence_
+	// though, because we activated all keys that follow the previous
+	// sequence.
+	//
+	// So we need to do the clearing in reset, because we need to know
+	// the sequence_ before it is cleared for whatever reason (think
+	// timeout)
+	//
+	// Activating or better say changing leds could happen on
+	// keyswitchevent, when we know that we updated the sequence_, it
+	// might be ok to just update everything in afterEachCycle - this
+	// is a performance question i guess, as looking through the whole
+	// leader dict and checking ALL sequences for a match can get slow
+	// i guess.
+	//
+	// Maybe it would make sense to store the led value that was there
+	// before we change it, but that would take a lot of memory in the
+	// worst case, as enough seuquences could replace a lot of keys
+	// colors. Also we would have to identify if this plugin set that
+	// color or some other. I think it is not worth the effort, the
+	// cases where resetting the colors of the current led-mode is too
+	// generalistic are rare enough to be ignored here. - problem is
+	// also if another plugin sets a color then leader picks that up
+	// and changes it and then the initial plugin disables it, if we
+	// now reset to the previous plugins color, it would give a false
+	// impression - the only safe bet would probably be to always
+	// update leds on every cycle - as a coding practive for plugins,
+	// unless a layered system is used - one is performance heavy, the
+	// other memory heavy.
+
