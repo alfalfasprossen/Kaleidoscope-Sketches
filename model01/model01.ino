@@ -29,8 +29,9 @@
 #include <Kaleidoscope-LED-LeaderSequenceColor.h>
 
 // Macros
-enum { MACRO_ARROW,
-       MACRO_TOGGLE_RECENT_OR_DEFAULT
+enum {
+  MACRO_ARROW,
+  MACRO_TOGGLE_RECENT_OR_DEFAULT
 };
 
 // Layers
@@ -148,9 +149,9 @@ KEYMAPS(
 // *INDENT-ON*
 
 static void arrowMacro(uint8_t keyState) {
-	if (keyToggledOn(keyState)) {
-		Macros.type(PSTR("->"));
-	}
+  if (keyToggledOn(keyState)) {
+    Macros.type(PSTR("->"));
+  }
 }
 
 static uint8_t recentGamingLayer = GAMING;
@@ -159,60 +160,61 @@ static uint8_t recentGamingLayer = GAMING;
  * Toggle the most recent gaming layer.
  */
 static void toggleRecentOrDefaultMacro(uint8_t keyState) {
-	if (!keyToggledOn(keyState)) {
-		return;
-	}
-	if (Layer.top() < GAMING || Layer.top() >= NUMBER) {
-		// Current top layer is not a gaming layer.
-		Layer.activate(recentGamingLayer);
-	} else {
-		Layer.deactivate(recentGamingLayer);
-	}
+  if (!keyToggledOn(keyState)) {
+    return;
+  }
+  if (Layer.top() < GAMING || Layer.top() >= NUMBER) {
+    // Current top layer is not a gaming layer.
+    Layer.activate(recentGamingLayer);
+  } else {
+    Layer.deactivate(recentGamingLayer);
+  }
 }
 
 static void leadToggleMacLayer(uint8_t seq_index) {
-	if (Layer.isActive(MAC_MODIFIERS)) {
-		Layer.deactivate(MAC_MODIFIERS);
-	} else {
-		Layer.activate(MAC_MODIFIERS);
-	}
+  if (Layer.isActive(MAC_MODIFIERS)) {
+    Layer.deactivate(MAC_MODIFIERS);
+  } else {
+    Layer.activate(MAC_MODIFIERS);
+  }
 }
 
 static void leadToggleGamingXLayer(uint8_t seq_index) {
-	// This assumes that the gaming layers are first in the leader
-	// dict and their order matches that in the layer list. Also
-	// currently this assumes that the leader can only be activated
-	// when no gaming layer is active.
-	uint8_t targetLayer = GAMING + seq_index;
-	if (Layer.isActive(targetLayer)) {
-		Layer.deactivate(targetLayer);
-	} else {
-		// TODO: Maybe it would be safer to deactivate all gaming
-		// layers except for the target.
-		Layer.activate(targetLayer);
-		recentGamingLayer = targetLayer;
-	}
+  // This assumes that the gaming layers are first in the leader
+  // dict and their order matches that in the layer list. Also
+  // currently this assumes that the leader can only be activated
+  // when no gaming layer is active.
+  uint8_t targetLayer = GAMING + seq_index;
+  if (Layer.isActive(targetLayer)) {
+    Layer.deactivate(targetLayer);
+  } else {
+    // TODO: Maybe it would be safer to deactivate all gaming
+    // layers except for the target.
+    Layer.activate(targetLayer);
+    recentGamingLayer = targetLayer;
+  }
 }
 
 
+// *INDENT-OFF*
 static const kaleidoscope::plugin::Leader::dictionary_t leader_dictionary[] PROGMEM =
-	LEADER_DICT({LEADER_SEQ(LEAD(0), Key_G, Key_G), leadToggleGamingXLayer},
-	            {LEADER_SEQ(LEAD(0), Key_G, Key_T, Key_1), leadToggleGamingXLayer},
-	            {LEADER_SEQ(LEAD(0), Key_G, Key_T, Key_3), leadToggleGamingXLayer},
-	            {LEADER_SEQ(LEAD(0), Key_M), leadToggleMacLayer});
-
+LEADER_DICT({LEADER_SEQ(LEAD(0), Key_G, Key_G), leadToggleGamingXLayer},
+            {LEADER_SEQ(LEAD(0), Key_G, Key_T, Key_1), leadToggleGamingXLayer},
+            {LEADER_SEQ(LEAD(0), Key_G, Key_T, Key_3), leadToggleGamingXLayer},
+            {LEADER_SEQ(LEAD(0), Key_M), leadToggleMacLayer});
+// *INDENT-ON*
 
 
 const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
   switch (macroIndex) {
 
   case MACRO_ARROW:
-	  arrowMacro(keyState);
-	  break;
+    arrowMacro(keyState);
+    break;
 
   case MACRO_TOGGLE_RECENT_OR_DEFAULT:
-	  toggleRecentOrDefaultMacro(keyState);
-	  break;
+    toggleRecentOrDefaultMacro(keyState);
+    break;
   }
   return MACRO_NONE;
 }
