@@ -36,7 +36,7 @@ enum {
 };
 
 // Layers
-enum { QWERTY, MAC_MODIFIERS, GAMING, GAMING_TR1, GAMING_TR3, NUMBER, FUNCTION };
+enum { QWERTY, COLEMAK_DH, MAC_MODIFIERS, GAMING, GAMING_TR1, GAMING_TR3, NUMBER, FUNCTION };
 
 // *INDENT-OFF*
 KEYMAPS(
@@ -53,6 +53,21 @@ KEYMAPS(
    Key_Enter, Key_Y, Key_U, Key_I, Key_O, Key_P, Key_Equals,
    Key_H, Key_J, Key_K, Key_L, Key_Semicolon, TOPSY(Quote),
    LSHIFT(Key_Minus), LT(NUMBER, N), Key_M, Key_Comma, Key_Period, Key_Slash, Key_Minus,
+   OSM(LeftAlt), OSM(RightShift), Key_Spacebar, OSM(RightControl),
+   ShiftToLayer(FUNCTION)),
+
+  [COLEMAK_DH] = KEYMAP_STACKED
+  (Key_Escape, Key_1, Key_2, Key_3, Key_4, Key_5, M(MACRO_TOGGLE_RECENT_OR_DEFAULT),
+   Key_Quote, Key_Q, Key_W, Key_F, Key_P, Key_B, Key_Tab,
+   Key_Backtick, Key_A, Key_R, Key_S, Key_T, Key_G,
+   OSL(NUMBER), Key_Z, Key_X, Key_C, Key_D, Key_V, Key_LeftGui,
+   OSM(LeftControl), Key_Backspace, OSM(LeftAlt), OSM(LeftShift),
+   ShiftToLayer(FUNCTION),
+
+   LEAD(0),  Key_6, Key_7, Key_8, Key_9, Key_0, XXX,
+   Key_Enter, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
+   Key_K, Key_N, Key_E, Key_I, Key_O, TOPSY(Quote),
+   LSHIFT(Key_Minus), Key_M, Key_H, Key_Comma, Key_Period, Key_Slash, Key_Minus,
    OSM(LeftAlt), OSM(RightShift), Key_Spacebar, OSM(RightControl),
    ShiftToLayer(FUNCTION)),
 
@@ -180,6 +195,14 @@ static void leadToggleMacLayer(uint8_t seq_index) {
   }
 }
 
+static void leadToggleColemakLayer(uint8_t seq_index) {
+  if (Layer.isActive(COLEMAK_DH)) {
+    Layer.deactivate(COLEMAK_DH);
+  } else {
+    Layer.activate(COLEMAK_DH);
+  }
+}
+
 static void leadToggleGamingXLayer(uint8_t seq_index) {
   // This assumes that the gaming layers are first in the leader
   // dict and their order matches that in the layer list. Also
@@ -202,6 +225,7 @@ static const kaleidoscope::plugin::Leader::dictionary_t leader_dictionary[] PROG
 LEADER_DICT({LEADER_SEQ(LEAD(0), Key_G, Key_G), leadToggleGamingXLayer},
             {LEADER_SEQ(LEAD(0), Key_G, Key_T, Key_1), leadToggleGamingXLayer},
             {LEADER_SEQ(LEAD(0), Key_G, Key_T, Key_3), leadToggleGamingXLayer},
+            {LEADER_SEQ(LEAD(0), Key_C), leadToggleColemakLayer},
             {LEADER_SEQ(LEAD(0), Key_M), leadToggleMacLayer});
 // *INDENT-ON*
 
