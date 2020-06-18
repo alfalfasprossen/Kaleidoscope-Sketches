@@ -305,13 +305,10 @@ KALEIDOSCOPE_INIT_PLUGINS(
   LEDRainbowWaveEffect,
   LEDDigitalRainEffect,
   solidYellow, solidGreen, solidViolet,
-  // The LED Palette Theme plugin provides a shared palette for other plugins,
-  // like Colormap below
-  LEDPaletteTheme,
-  // The Colormap effect makes it possible to set up per-layer colormaps
-  ColormapEffect,
+
   LeaderSequenceColorEffect,
   Leader,
+
   TopsyTurvy,
   ActiveModColorEffect,
   Macros,
@@ -341,7 +338,6 @@ void setup() {
   // with USB devices
   LEDOff.activate();
 
-  ColormapEffect.max_layers(5);
   ActiveModColorEffect.highlightNormalModifiers(false);
   Leader.dictionary = leader_dictionary;
 }
