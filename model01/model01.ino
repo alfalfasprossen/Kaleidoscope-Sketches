@@ -36,7 +36,7 @@ enum {
 };
 
 // Layers
-enum { QWERTY, COLEMAK_DH, MAC_MODIFIERS, GAMING, GAMING_TR1, GAMING_TR3, NUMBER, FUNCTION };
+enum { QWERTY, COLEMAK, MAC_MODIFIERS, GAMING, GAMING_TR1, GAMING_TR3, NUMBER, FUNCTION };
 
 // *INDENT-OFF*
 KEYMAPS(
@@ -56,10 +56,11 @@ KEYMAPS(
    OSM(LeftAlt), OSM(RightShift), Key_Spacebar, OSM(RightControl),
    ShiftToLayer(FUNCTION)),
 
-  [COLEMAK_DH] = KEYMAP_STACKED
+  // A customized colemak layout: DH-mod, SR-swap.
+  [COLEMAK] = KEYMAP_STACKED
   (Key_Escape, Key_1, Key_2, Key_3, Key_4, Key_5, M(MACRO_TOGGLE_RECENT_OR_DEFAULT),
    Key_Quote, Key_Q, Key_W, Key_F, Key_P, Key_B, Key_Tab,
-   Key_Backtick, Key_A, Key_R, Key_S, Key_T, Key_G,
+   Key_Backtick, Key_A, Key_S, Key_R, Key_T, Key_G,
    OSL(NUMBER), Key_Z, Key_X, Key_C, Key_D, Key_V, Key_LeftGui,
    OSM(LeftControl), Key_Backspace, OSM(LeftAlt), OSM(LeftShift),
    ShiftToLayer(FUNCTION),
@@ -196,10 +197,10 @@ static void leadToggleMacLayer(uint8_t seq_index) {
 }
 
 static void leadToggleColemakLayer(uint8_t seq_index) {
-  if (Layer.isActive(COLEMAK_DH)) {
-    Layer.deactivate(COLEMAK_DH);
+  if (Layer.isActive(COLEMAK)) {
+    Layer.deactivate(COLEMAK);
   } else {
-    Layer.activate(COLEMAK_DH);
+    Layer.activate(COLEMAK);
   }
 }
 
