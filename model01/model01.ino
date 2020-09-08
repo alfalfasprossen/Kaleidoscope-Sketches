@@ -36,41 +36,44 @@ enum {
 };
 
 // Layers
-enum { QWERTY, COLEMAK, MAC_MODIFIERS, GAMING, GAMING_TR1, GAMING_TR3, NUMBER, FUNCTION };
+enum { QWERTY, COLEMAK, MAC_MODIFIERS, GAMING, GAMING_TR1, GAMING_TR3, NUMBER, SYMBOL, FUNCTION };
 
 // *INDENT-OFF*
 KEYMAPS(
 
   [QWERTY] = KEYMAP_STACKED
   (Key_Escape, Key_1, Key_2, Key_3, Key_4, Key_5, M(MACRO_TOGGLE_RECENT_OR_DEFAULT),
-   Key_Quote, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
-   Key_Backtick, Key_A, Key_S, Key_D, Key_F, Key_G,
+   Key_Backtick, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
+   Key_Quote, Key_A, Key_S, Key_D, Key_F, Key_G,
    OSL(NUMBER), Key_Z, Key_X, Key_C, Key_V, Key_B, Key_LeftGui,
-   OSM(LeftControl), Key_Backspace, OSM(LeftAlt), OSM(LeftShift),
+   Key_LeftControl, LT(SYMBOL, Backspace), Key_LeftAlt, OSM(LeftShift),
    ShiftToLayer(FUNCTION),
 
    LEAD(0),  Key_6, Key_7, Key_8, Key_9, Key_0, XXX,
    Key_Enter, Key_Y, Key_U, Key_I, Key_O, Key_P, Key_Equals,
-   Key_H, Key_J, Key_K, Key_L, Key_Semicolon, TOPSY(Quote),
-   LSHIFT(Key_Minus), LT(NUMBER, N), Key_M, Key_Comma, Key_Period, Key_Slash, Key_Minus,
-   OSM(LeftAlt), OSM(RightShift), Key_Spacebar, OSM(RightControl),
+   Key_H, LT(NUMBER, J), Key_K, Key_L, Key_Semicolon, TOPSY(Quote),
+   LSHIFT(Key_Minus), Key_N, Key_M, Key_Comma, Key_Period, Key_Slash, Key_Minus,
+   OSL(SYMBOL), OSM(RightShift), Key_Spacebar, Key_RightControl,
    ShiftToLayer(FUNCTION)),
 
-  // A customized colemak layout: DH-mod, SR-swap.
+  // A customized colemak layout: DH-mod, SR-swap
   [COLEMAK] = KEYMAP_STACKED
   (Key_Escape, Key_1, Key_2, Key_3, Key_4, Key_5, M(MACRO_TOGGLE_RECENT_OR_DEFAULT),
-   Key_Quote, Key_Q, Key_W, Key_F, Key_P, Key_B, Key_Tab,
-   Key_Backtick, Key_A, Key_S, Key_R, Key_T, Key_G,
+   // Key_Backtick, Key_Q, Key_W, Key_F, Key_P, Key_G, Key_Tab,
+   // Key_Quote, Key_A, Key_S, Key_R, Key_T, Key_D,
+   // OSL(NUMBER), Key_Z, Key_X, Key_C, Key_V, Key_B, Key_LeftGui,
+   Key_Backtick, Key_Q, Key_W, Key_F, Key_P, Key_B, Key_Tab,
+   Key_Quote, Key_A, Key_S, Key_R, Key_T, Key_G,
    OSL(NUMBER), Key_Z, Key_X, Key_C, Key_D, Key_V, Key_LeftGui,
-   OSM(LeftControl), Key_Backspace, OSM(LeftAlt), OSM(LeftShift),
-   ShiftToLayer(FUNCTION),
+   ___, ___, ___, ___,
+   ___,
 
    LEAD(0),  Key_6, Key_7, Key_8, Key_9, Key_0, XXX,
    Key_Enter, Key_J, Key_L, Key_U, Key_Y, Key_Semicolon, Key_Equals,
-   Key_K, Key_N, Key_E, Key_I, Key_O, TOPSY(Quote),
+   Key_K, LT(NUMBER, N), Key_E, Key_I, Key_O, TOPSY(Quote),
    LSHIFT(Key_Minus), Key_M, Key_H, Key_Comma, Key_Period, Key_Slash, Key_Minus,
-   OSM(LeftAlt), OSM(RightShift), Key_Spacebar, OSM(RightControl),
-   ShiftToLayer(FUNCTION)),
+   ___, ___, ___, ___,
+   ___),
 
   [MAC_MODIFIERS] = KEYMAP_STACKED
   (___, ___, ___, ___, ___, ___, ___,
@@ -135,7 +138,7 @@ KEYMAPS(
   [NUMBER] = KEYMAP_STACKED
   (___, ___, ___, ___, ___, ___, XXX,
    ___, Key_KeypadAdd, Key_7, Key_8, Key_9, Key_KeypadDivide, ___,
-   ___, Key_4, Key_3, Key_2, Key_1, Key_0,
+   ___, Key_KeypadDot, Key_3, Key_2, Key_1, Key_0,
    ___, Key_KeypadSubtract, Key_4, Key_5, Key_6, Key_KeypadDot, ___,
    ___, ___, ___, XXX,
    ShiftToLayer(FUNCTION),
@@ -147,18 +150,40 @@ KEYMAPS(
    ___, ___, ___, ___,
    ShiftToLayer(FUNCTION)),
 
+  // ! @ # $ % ^ & * / \ | <> [] () {} _ - + = ' ` ~ " ; : , . ->
+  [SYMBOL] =  KEYMAP_STACKED
+  (___, XXX, XXX, XXX, XXX, XXX, XXX,
+   XXX, LSHIFT(Key_5) /* % */, LSHIFT(Key_6) /* ^ */, Key_KeypadMultiply /* * */, Key_LeftBracket, Key_RightBracket, XXX,
+   XXX, LSHIFT(Key_4) /* $ */, LSHIFT(Key_2) /* @ */, LSHIFT(Key_3) /* # */, Key_LeftParen, Key_RightParen,
+   XXX, LSHIFT(Key_Comma) /* < */, LSHIFT(Key_Period) /* > */, LSHIFT(Key_1) /* ! */, Key_LeftCurlyBracket, Key_RightCurlyBracket, XXX,
+   ___, ___, ___, ___,
+   ___,
+
+   XXX, XXX, XXX, XXX, XXX, XXX, XXX,
+   XXX, XXX, XXX, LSHIFT(Key_7) /* & */, XXX, XXX, XXX,
+   LSHIFT(Key_Backtick) /* ~ */, LSHIFT(Key_Minus) /* _ */, Key_Minus, Key_KeypadAdd, Key_Equals, XXX,
+   XXX, Key_Backtick, LSHIFT(Key_Quote) /* " */, Key_Quote /* ' */, Key_Pipe, Key_Slash, XXX,
+   ___, ___, ___, ___,
+   ___),
+
   [FUNCTION] =  KEYMAP_STACKED
   (___, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_LEDEffectNext,
-   Consumer_Mute, LSHIFT(Key_5), LSHIFT(Key_2), Key_KeypadMultiply, Key_LeftBracket, Key_RightBracket, ___,
-   Consumer_VolumeIncrement, LSHIFT(Key_4), LSHIFT(Key_3), Key_Delete, Key_LeftParen, Key_RightParen,
-   Consumer_VolumeDecrement,  Key_Minus, Key_Equals, LSHIFT(Key_1), Key_LeftCurlyBracket, Key_RightCurlyBracket, ___,
+   Consumer_Mute, XXX, LCTRL(Key_Backspace), LCTRL(Key_Delete), LCTRL(Key_LeftBracket), LCTRL(Key_RightBracket), XXX,
+   Consumer_VolumeIncrement, XXX, Key_Backspace, Key_Delete, LCTRL(Key_LeftParen), LCTRL(Key_RightParen),
+   // TODO: The shortcuts may be uneccessary, I might replace them
+   // with often used right-side keys for mouse based applications,
+   // like the E key which is on the right with colemak. On the other
+   // hand, if I keep using a mac, I might want to ge used to these
+   // and change them on a mac-layer, instead of re-thinking to hold
+   // CMD instead of CTRL by hand.
+   Consumer_VolumeDecrement,  LCTRL(Key_Z), LCTRL(Key_X), LCTRL(Key_C), LCTRL(Key_V), LCTRL(Key_B), XXX,
    ___, Key_Space, ___, ___,
    ___,
 
    XXX, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11,
-   ___, LSHIFT(Key_6), LCTRL(Key_LeftArrow), Key_Home, LCTRL(Key_RightArrow), Key_PrintScreen, Key_F12,
-   Key_LeftArrow, Key_DownArrow, Key_UpArrow, Key_RightArrow,  Key_End, ___,
-   ___, LSHIFT(Key_7), Key_PageDown, Key_PageUp, M(MACRO_ARROW), Key_Backslash, Key_Pipe,
+   XXX, XXX, LCTRL(Key_LeftArrow), Key_Home, LCTRL(Key_RightArrow), Key_PrintScreen, Key_F12,
+   Key_LeftArrow, Key_DownArrow, Key_UpArrow, Key_RightArrow,  Key_End, XXX,
+   XXX, XXX, Key_PageDown, Key_PageUp, XXX, Key_Backslash, Key_Pipe,
    ___, ___, Key_Backspace, ___,
    ___)
 ) // KEYMAPS(
