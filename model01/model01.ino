@@ -28,6 +28,7 @@
 #include <Kaleidoscope-Qukeys.h>
 
 #include <Kaleidoscope-LED-LeaderSequenceColor.h>
+#include <Kaleidoscope-Repeater.h>
 
 // Macros
 enum {
@@ -229,6 +230,10 @@ static void leadToggleColemakLayer(uint8_t seq_index) {
   }
 }
 
+static void leadToggleRepeater(uint8_t seq_index) {
+	Repeater.isActive() ? Repeater.deactivate() : Repeater.activate();
+}
+
 static void leadToggleGamingXLayer(uint8_t seq_index) {
   // This assumes that the gaming layers are first in the leader
   // dict and their order matches that in the layer list. Also
@@ -251,8 +256,9 @@ static const kaleidoscope::plugin::Leader::dictionary_t leader_dictionary[] PROG
 LEADER_DICT({LEADER_SEQ(LEAD(0), Key_G, Key_G), leadToggleGamingXLayer},
             {LEADER_SEQ(LEAD(0), Key_G, Key_T, Key_1), leadToggleGamingXLayer},
             {LEADER_SEQ(LEAD(0), Key_G, Key_T, Key_3), leadToggleGamingXLayer},
-            {LEADER_SEQ(LEAD(0), Key_C), leadToggleColemakLayer},
-            {LEADER_SEQ(LEAD(0), Key_M), leadToggleMacLayer});
+            {LEADER_SEQ(LEAD(0), Key_T, Key_C), leadToggleColemakLayer},
+            {LEADER_SEQ(LEAD(0), Key_T, Key_R), leadToggleRepeater},
+            {LEADER_SEQ(LEAD(0), Key_T, Key_M), leadToggleMacLayer});
 // *INDENT-ON*
 
 
@@ -360,6 +366,7 @@ KALEIDOSCOPE_INIT_PLUGINS(
 
   LeaderSequenceColorEffect,
   Leader,
+  Repeater,
 
   TopsyTurvy,
   ActiveModColorEffect,
@@ -393,6 +400,11 @@ void setup() {
   ActiveModColorEffect.highlightNormalModifiers(false);
   Leader.dictionary = leader_dictionary;
   Qukeys.setOverlapThreshold(0);
+  REGISTER_REPEATERS(
+    {Key_W, Key_W, Key_W},
+    {Key_NoKey, Key_W, Key_S}
+  );
+  Repeater.limited_to_layer = GAMING;
 }
 
 
