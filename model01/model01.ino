@@ -392,6 +392,7 @@ void setup() {
 
   ActiveModColorEffect.highlightNormalModifiers(false);
   Leader.dictionary = leader_dictionary;
+  Qukeys.setOverlapThreshold(0);
 }
 
 
