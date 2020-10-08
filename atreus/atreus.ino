@@ -64,14 +64,14 @@ KEYMAPS(
   [QWERTY] = KEYMAP_STACKED
   (
    Key_Q,            Key_W,       Key_E,       Key_R,                Key_T,
-   MT(LeftShift, A), Key_S,       Key_D,       LT(NAV, F),           Key_G,
+   Key_A,            Key_S,       Key_D,       LT(NAV, F),           Key_G,
    Key_Z,            Key_X,       Key_C,       Key_V,                Key_B,              Key_Tab,
-   Key_Esc,          OSL(NUMBER), Key_LeftGui, ShiftToLayer(SYMBOL), LT(NAV, Backspace), Key_LeftAlt,
+   Key_Esc,          OSL(NUMBER), Key_LeftGui, Key_LeftControl,      LT(NAV, Backspace), Key_LeftAlt,
 
                     Key_Y,     Key_U,            Key_I,               Key_O,      Key_P,
-                    Key_H,     LT(NAV, J),       MT(RightControl, K), Key_L,      MT(RightShift, Semicolon),
+                    Key_H,     LT(NAV, J),       Key_K,               Key_L,      Key_Semicolon,
    Key_Enter,       Key_N,     Key_M,            Key_Comma,           Key_Period, Key_Slash,
-   OSM(RightShift), Key_Space, Key_RightControl, OSL(NUMBER),         OSL(SUPER), LEAD(0)
+   OSM(RightShift), MT(LeftControl, Space), ShiftToLayer(SYMBOL), OSL(NUMBER), OSL(SUPER), LEAD(0)
   ),
 
   // A customized colemak layout: DH-mod, SR-swap
@@ -121,11 +121,11 @@ KEYMAPS(
    XXX, XXX,                  XXX,               XXX,                    XXX,   ___,
    ___, ___, ___, ___, ___, ___,
 
-   //   XXX,      LCTRL(Key_LeftArrow), Key_UpArrow,   LCTRL(Key_RightArrow), XXX,
+   //   Key_F11,      LCTRL(Key_LeftArrow), Key_UpArrow,   LCTRL(Key_RightArrow), Key_PrintScreen,
    //   Key_Home, Key_LeftArrow,        Key_DownArrow, Key_RightArrow,        Key_End,
-        XXX,           LCTRL(Key_LeftArrow), Key_Home,    LCTRL(Key_RightArrow), XXX,
+        Key_F11,           LCTRL(Key_LeftArrow), Key_Home,    LCTRL(Key_RightArrow), Key_PrintScreen,
         Key_LeftArrow, Key_DownArrow,        Key_UpArrow, Key_RightArrow,        Key_End,
-   ___, XXX,           Key_PageDown,         Key_PageUp,  XXX,                   XXX,
+   ___, Key_Enter,     Key_PageDown,         Key_PageUp,  XXX,                   XXX,
    ___, ___, ___, ___, ___,  ___
   ),
 
