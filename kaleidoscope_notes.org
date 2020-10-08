@@ -124,3 +124,71 @@ KeyAddr getAddrFromKey(const Key& key) {
 	// unless a layered system is used - one is performance heavy, the
 	// other memory heavy.
 
+
+* Ideas
+german input target language converter - toggleable conversion from US
+base layout to produce correct AltGr-combos for a German OS input
+language. - should ideally be configurable later to target different
+targets like US-International, though they might be too different,
+using dead keys?
+
+german postfix input method - check if syster can be of help here.
+
+layered LED-Control - currently if multiple plugins use setCrgbAt, and
+then use refreshAt, they may reset values of others similar plugins.
+This is because those plugins aren't LED-Modes, maybe they should be,
+but maybe it would be simpler to register a layer per color altering
+plugin.
+
+sparse per layer keymap color - a single plugin that allows to
+register a sparse keymap color per layer, say one layer should only
+highlight a single key in a different color or so. This would allow
+multiple plugins to highlight different keys to indicate that they are
+all active.
+
+* Conditional Features Through Preprocessor
+
+Gedankenexperimenter also talked about this topic multiple times on
+Discord. I may have a Plugin that provides a preprocessor macro to use
+or not to use certain aspects of the code that may increase the memory
+fottprint of the sketch. Examples would be defining sizes of nested
+static arrays, where only certain users may need larger arrays while
+it would be a memory waste for many others. 
+
+Another thing might be features or dependencies. Think a plugin that
+wants to output unicode symbols - we have multiple ways of doing so
+depending on support on the users target platform. We may have a
+plugin to input unicode via Alt+CODEPOINT input, we may soon have the
+host_keymap plugin which might take care of this in certain cases as
+well and there might be other, simpler approaches if the target
+platform layout is known - e.g. simply using AltGr to input only the
+certain set of symbols that the user needs. Now that specific plugin
+that wants to send unicode symbols wants to make use of ONE of these
+other plugins to handle the "actual input" and not do it itself. So
+defining via preprocessor which other plugin to use might make
+sense. - an alternative might be to provide additional plugins, one
+for each plugin that handles unicode input but are designed as a
+common interface. By only including one of the handler plugins, only
+one type of unicode input plugin needs to be included as well, as
+opposed to all of them when allowing to just dynamically define which
+to use inside the main plugin.
+
+
+
+* Snippets
+
+** Macro for unshifting a key
+  case 2:
+	  if (keyToggledOn(keyState)) {
+		  if (kaleidoscope::Runtime.hid().keyboard().wasModifierKeyActive(Key_LeftShift) ||
+		      kaleidoscope::Runtime.hid().keyboard().wasModifierKeyActive(Key_RightShift))
+		  {
+			  U(LeftShift);
+			  U(RightShift);
+			  T(6);
+		  } else {
+			  D(LeftShift);
+			  T(6);
+			  U(LeftShift);
+		  }
+	  }
